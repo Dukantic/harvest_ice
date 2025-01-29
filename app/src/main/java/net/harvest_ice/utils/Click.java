@@ -2,10 +2,15 @@
 package net.harvest_ice.utils;
 import java.time.*;
 
+
+
 public class Click {
-    private float money = 0;
-    private float lastMoney = 0;
-    private float moneyPerBreak = 5;
+    static private final float LAMBDA_TIME_BREAK = 1.2F;
+    static private final float LAMBDA_MONEY_BREAK = 1.1F;
+
+    private double money = 0;
+    private double lastMoney = 0;
+    private float moneyPerBreak = 1;
     private long timeBreak;
     LocalTime nextBreak ;
 
@@ -13,12 +18,12 @@ public class Click {
     {
         this.money = 0;
         this.lastMoney = 0;
-        this.timeBreak = 1;
-        this.moneyPerBreak = 5;
-        this.nextBreak = LocalTime.now().plusSeconds(timeBreak);
+        this.timeBreak = (long) 1e9; 
+        this.moneyPerBreak = 1;
+        this.nextBreak = LocalTime.now().plusNanos(this.timeBreak);
     }
 
-    public float getMoney()
+    public double getMoney()
     {
         return this.money;
     }
@@ -28,7 +33,7 @@ public class Click {
         while (LocalTime.now().isAfter(this.nextBreak))
         {
 
-            this.nextBreak = this.nextBreak.plusSeconds(this.timeBreak);
+            this.nextBreak = this.nextBreak.plusNanos(this.timeBreak);
             this.money += moneyPerBreak;
         }
     }
@@ -47,9 +52,47 @@ public class Click {
         }
     }
 
+    private boolean isPurchasable(float price)
+    {
+        if (price <= this.money)
+        {
+            this.money -= price;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean purchaseMoreTime(float price)
+    {
+        if (this.isPurchasable(price))
+        {
+            long dif = this.timeBreak;
+            this.timeBreak *= LAMBDA_TIME_BREAK;
+            this.moneyPerBreak *= LAMBDA_MONEY_BREAK;
+            dif = this.timeBreak - dif ;
+            this.nextBreak = this.nextBreak.plusNanos(dif);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean purchaseLessTime(float price)
+    {
+        if (this.timeBreak >= 1e7 && this.isPurchasable(price))
+        {
+            long dif = this.timeBreak;
+            this.timeBreak /= LAMBDA_TIME_BREAK;
+            dif -= timeBreak;
+            this.nextBreak = this.nextBreak.plusNanos(-dif);
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public String toString()
     {
-        return String.valueOf(this.money) + "¤";
+        return String.format("%.2f", this.money) + "¤" ;
     }
 }
