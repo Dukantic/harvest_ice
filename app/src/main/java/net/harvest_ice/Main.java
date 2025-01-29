@@ -1,7 +1,6 @@
 package  net.harvest_ice;
 
 import net.harvest_ice.utils.*;
-import java.time.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,6 +11,7 @@ public class Main {
         while(loop)
         {
             variClick.tick();
+            variClick.displayIfMoneyChange();
             if(variClick.getMoney() >= 20)
             {
                 loop = false;

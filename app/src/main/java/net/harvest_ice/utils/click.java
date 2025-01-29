@@ -4,13 +4,15 @@ import java.time.*;
 
 public class click {
     private float money = 0;
-    private long timeBreak;
+    private float lastMoney = 0;
     private float moneyPerBreak = 5;
+    private long timeBreak;
     LocalTime nextBreak ;
 
     public click()
     {
         this.money = 0;
+        this.lastMoney = 0;
         this.timeBreak = 1;
         this.moneyPerBreak = 5;
         this.nextBreak = LocalTime.now().plusSeconds(timeBreak);
@@ -27,7 +29,6 @@ public class click {
         {
             this.nextBreak = LocalTime.now().plusSeconds(this.timeBreak);
             this.money += moneyPerBreak;
-            System.out.println(this);
         }
     }
 
@@ -35,6 +36,15 @@ public class click {
     {
         
         this.breakIce();
+    }
+
+    public void displayIfMoneyChange()
+    {
+        if (this.lastMoney != this.money)
+        {
+            System.out.println(this);
+            this.lastMoney = this.money;
+        }
     }
 
     @Override
