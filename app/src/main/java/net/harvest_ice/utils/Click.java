@@ -2,14 +2,14 @@
 package net.harvest_ice.utils;
 import java.time.*;
 
-public class click {
+public class Click {
     private float money = 0;
     private float lastMoney = 0;
     private float moneyPerBreak = 5;
     private long timeBreak;
     LocalTime nextBreak ;
 
-    public click()
+    public Click()
     {
         this.money = 0;
         this.lastMoney = 0;
@@ -25,16 +25,16 @@ public class click {
 
     private void breakIce()
     {
-        if (LocalTime.now().isAfter(this.nextBreak))
+        while (LocalTime.now().isAfter(this.nextBreak))
         {
-            this.nextBreak = LocalTime.now().plusSeconds(this.timeBreak);
+
+            this.nextBreak = this.nextBreak.plusSeconds(this.timeBreak);
             this.money += moneyPerBreak;
         }
     }
 
     public void tick()
     {
-        
         this.breakIce();
     }
 
