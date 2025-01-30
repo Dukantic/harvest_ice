@@ -89,6 +89,16 @@ public class Click {
         return false;
     }
 
+    public boolean purchaseLessPrice(float price)
+    {
+        if (this.isPurchasable(price))
+        {
+             
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public String toString()
